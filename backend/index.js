@@ -16,10 +16,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors()); // In production, you might want to restrict this to your frontend's domain
 
-// --- Serve Frontend Statically (IMPORTANT FOR DEPLOYMENT) ---
-// This tells Express to serve the files from your 'Frontend' directory
-const frontendPath = path.join(__dirname, '..', 'Frontend');
-app.use(express.static(frontendPath));
+// --- Serve Frontend Statically (DISABLED for Render deployment) ---
+// ❌ On Render, we don’t serve the frontend here — it’s hosted separately on Vercel
+// const frontendPath = path.join(__dirname, '..', 'Frontend');
+// app.use(express.static(frontendPath));
 
 // --- RAZORPAY INSTANCE ---
 const razorpay = new Razorpay({
@@ -217,11 +217,11 @@ app.post('/api/verify-payment', async (req, res) => {
     }
 });
 
-// --- Fallback for all other GET requests: send the frontend index.html ---
-// This is crucial for single-page applications and correct routing on deployment.
-app.get('*', (req, res) => {
-    res.sendFile(path.join(frontendPath, 'index.html'));
-});
+// --- Fallback for all other GET requests ---
+// ❌ Disabled because frontend is hosted on Vercel, not from this server
+// app.get('*', (req, res) => {
+//     res.sendFile(path.join(frontendPath, 'index.html'));
+// });
 
 // --- START THE SERVER ---
 const PORT = process.env.PORT || 4000;
