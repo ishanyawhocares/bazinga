@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BAZINGA! - Big Bang Theory Exclusive</title>
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        /* Your existing beautiful CSS goes here - no changes needed */
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3a 50%, #2d2d5f 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ... All of your other CSS rules ... */
+        .stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle 2s infinite alternate; }
+        @keyframes twinkle { 0% { opacity: 0.3; } 100% { opacity: 1; } }
+        .container { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 20px; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+        .header { text-align: center; margin-bottom: 60px; animation: slideDown 1s ease-out; }
+        @keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .logo { font-family: 'Orbitron', monospace; font-size: 4rem; font-weight: 900; background: linear-gradient(45deg, #00ff88, #00ccff, #ff6b6b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 10px; text-shadow: 0 0 30px rgba(0, 255, 136, 0.5); animation: glow 2s ease-in-out infinite alternate; }
+        @keyframes glow { from { filter: brightness(1); } to { filter: brightness(1.3); } }
+        .tagline { font-size: 1.3rem; color: #a0a0ff; margin-bottom: 20px; font-style: italic; }
+        .step-indicator { display: flex; justify-content: center; margin-bottom: 40px; gap: 20px; }
+        .step { display: flex; align-items: center; color: rgba(255, 255, 255, 0.5); font-weight: 500; }
+        .step-number { width: 30px; height: 30px; border-radius: 50%; background: rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; margin-right: 10px; transition: all 0.3s ease; }
+        .step.active { color: #00ff88; }
+        .step.active .step-number { background: #00ff88; color: #0f0f23; }
+        .step.completed { color: #00ccff; }
+        .step.completed .step-number { background: #00ccff; color: #0f0f23; }
+        .page { display: none; animation: fadeIn 0.5s ease-out; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .main-content { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border-radius: 20px; padding: 60px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); text-align: center; }
+        .content-title { font-family: 'Orbitron', monospace; font-size: 2.5rem; color: #ffffff; margin-bottom: 30px; text-shadow: 0 0 20px rgba(255, 255, 255, 0.3); }
+        .content-description { font-size: 1.2rem; color: #cccccc; line-height: 1.8; margin-bottom: 40px; max-width: 800px; margin-left: auto; margin-right: auto; }
+        .highlight { color: #00ff88; font-weight: bold; }
+        .form-section { max-width: 500px; margin: 0 auto; }
+        .form-group { margin-bottom: 30px; }
+        .form-label { display: block; color: #ffffff; font-weight: 500; margin-bottom: 10px; font-size: 1.1rem; }
+        .form-input { width: 100%; padding: 15px 20px; border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 12px; background: rgba(255, 255, 255, 0.1); color: #ffffff; font-size: 1.1rem; transition: all 0.3s ease; backdrop-filter: blur(10px); }
+        .form-input:focus { outline: none; border-color: #00ff88; box-shadow: 0 0 20px rgba(0, 255, 136, 0.3); transform: translateY(-2px); }
+        .otp-container { display: flex; gap: 15px; justify-content: center; margin: 20px 0; }
+        .otp-input { width: 60px; height: 60px; text-align: center; font-size: 1.5rem; font-weight: bold; border-radius: 12px; border: 2px solid rgba(255, 255, 255, 0.2); background: rgba(255, 255, 255, 0.1); color: #ffffff; transition: all 0.3s ease; }
+        .otp-input:focus { outline: none; border-color: #00ff88; box-shadow: 0 0 15px rgba(0, 255, 136, 0.3); }
+        .cta-button { width: 100%; padding: 18px; background: linear-gradient(45deg, #00ff88, #00ccff); border: none; border-radius: 12px; color: #0f0f23; font-size: 1.2rem; font-weight: bold; font-family: 'Orbitron', monospace; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3); margin-top: 20px; }
+        .cta-button:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(0, 255, 136, 0.5); filter: brightness(1.1); }
+        .cta-button:disabled { opacity: 0.7; cursor: not-allowed; }
+        .secondary-button { background: rgba(255, 255, 255, 0.1); color: #ffffff; border: 2px solid rgba(255, 255, 255, 0.2); }
+        .price-display { margin: 30px 0; padding: 20px; background: rgba(0, 255, 136, 0.1); border: 2px solid rgba(0, 255, 136, 0.3); border-radius: 15px; animation: pulse 2s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+        .price { font-family: 'Orbitron', monospace; font-size: 2rem; color: #00ff88; font-weight: bold; }
+        .price-subtitle { color: #cccccc; margin-top: 5px; }
+        .status-message { margin: 20px 0; padding: 15px; border-radius: 10px; font-weight: 500; text-align: center; animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { from { transform: translateX(-20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .status-success { background: rgba(0, 255, 136, 0.2); border: 1px solid #00ff88; color: #00ff88; }
+        .status-error { background: rgba(255, 107, 107, 0.2); border: 1px solid #ff6b6b; color: #ff6b6b; }
+        .status-loading { background: rgba(0, 204, 255, 0.2); border: 1px solid #00ccff; color: #00ccff; }
+        .loading-spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid rgba(0, 204, 255, 0.3); border-top: 2px solid #00ccff; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 10px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .footer { text-align: center; margin-top: 50px; color: rgba(255, 255, 255, 0.6); font-size: 0.9rem; padding-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div class="stars" id="starsContainer"></div>
+
+    <div class="container">
+        <header class="header">
+            <h1 class="logo">BAZINGA!</h1>
+            <p class="tagline">"I am not crazy, my mother had me tested."</p>
+        </header>
+
+        <div class="step-indicator">
+            <div class="step active" id="step1"><div class="step-number">1</div><span>Email Verification</span></div>
+            <div class="step" id="step2"><div class="step-number">2</div><span>Payment & Download</span></div>
+        </div>
+
+        <!-- Page 1: Email Verification -->
+        <div class="page active" id="emailVerificationPage">
+            <main class="main-content">
+                <h2 class="content-title">Verify Your Email First</h2>
+                <p class="content-description">
+                    To get your <span class="highlight">exclusive Big Bang Theory image collection</span>, 
+                    we need to verify your email. <span class="highlight">Sheldon would approve</span> of this method!
+                </p>
+                <div class="form-section">
+                    <form id="emailForm">
+                        <input type="email" id="email" class="form-input" placeholder="sheldon.cooper@caltech.edu" required>
+                        <button type="submit" class="cta-button" id="sendOtpBtn">Send Verification Code</button>
+                    </form>
+                    <div id="emailStatusMessage"></div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Page 2: OTP Verification -->
+        <div class="page" id="otpVerificationPage">
+            <main class="main-content">
+                <h2 class="content-title">🔐 Enter Verification Code</h2>
+                <p class="content-description">We've sent a <span class="highlight">6-digit code</span> to your email. Enter it below.</p>
+                <div class="form-section">
+                    <form id="otpForm">
+                        <div class="otp-container">
+                            <input type="text" class="otp-input" maxlength="1" id="otp1">
+                            <input type="text" class="otp-input" maxlength="1" id="otp2">
+                            <input type="text" class="otp-input" maxlength="1" id="otp3">
+                            <input type="text" class="otp-input" maxlength="1" id="otp4">
+                            <input type="text" class="otp-input" maxlength="1" id="otp5">
+                            <input type="text" class="otp-input" maxlength="1" id="otp6">
+                        </div>
+                        <button type="submit" class="cta-button" id="verifyOtpBtn">Verify & Continue</button>
+                    </form>
+                    <div id="otpStatusMessage"></div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Page 3: Payment -->
+        <div class="page" id="paymentPage">
+            <main class="main-content">
+                <h2 class="content-title">Ready for Your Collection!</h2>
+                <p class="content-description">Email verified! Get ready for the <span class="highlight">theoretical world of comedy</span>!</p>
+                <div class="price-display">
+                    <div class="price">₹1.50</div>
+                    <div class="price-subtitle">One-time payment • Instant delivery</div>
+                </div>
+                <div class="form-section">
+                    <button type="button" class="cta-button" id="paymentBtn">Purchase Now!</button>
+                    <div id="paymentStatusMessage"></div>
+                </div>
+            </main>
+        </div>
+
+        <footer class="footer">
+            <p>© 2025 BAZINGA! • Made with 🧬 and theoretical physics</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- GLOBAL CONFIG & STATE ---
+        const API_BASE_URL = 'http://localhost:4000'; // Use absolute path for local dev/preview
+        let userEmail = '';
+        let RAZORPAY_KEY_ID = ''; // This will be fetched from the backend
+
+        // --- DOM ELEMENTS ---
+        const emailForm = document.getElementById('emailForm');
+        const otpForm = document.getElementById('otpForm');
+        const emailInput = document.getElementById('email');
+        const sendOtpBtn = document.getElementById('sendOtpBtn');
+        const verifyOtpBtn = document.getElementById('verifyOtpBtn');
+        const paymentBtn = document.getElementById('paymentBtn');
+        const emailStatusMessage = document.getElementById('emailStatusMessage');
+        const otpStatusMessage = document.getElementById('otpStatusMessage');
+        const paymentStatusMessage = document.getElementById('paymentStatusMessage');
+
+        // --- UTILITY FUNCTIONS ---
+        function showStatus(container, message, type) {
+            container.innerHTML = `<div class="status-message status-${type}">${message}</div>`;
+        }
+
+        function showPage(pageNumber) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const pageId = { 1: 'emailVerificationPage', 2: 'otpVerificationPage', 3: 'paymentPage' }[pageNumber];
+            document.getElementById(pageId).classList.add('active');
+            updateStepIndicator(pageNumber);
+        }
+        
+        function updateStepIndicator(currentPage) {
+            const step1 = document.getElementById('step1');
+            const step2 = document.getElementById('step2');
+            step1.className = 'step';
+            step2.className = 'step';
+            if (currentPage === 1) step1.classList.add('active');
+            if (currentPage === 2) { step1.classList.add('completed'); step1.classList.add('active'); }
+            if (currentPage === 3) { step1.classList.add('completed'); step2.classList.add('active'); }
+        }
+
+        function setupOtpInputs() {
+            const otpInputs = document.querySelectorAll('.otp-input');
+            otpInputs.forEach((input, index) => {
+                input.addEventListener('input', () => {
+                    if (input.value && index < otpInputs.length - 1) otpInputs[index + 1].focus();
+                });
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace' && !input.value && index > 0) otpInputs[index - 1].focus();
+                });
+            });
+        }
+        
+        function createStars() {
+            const container = document.getElementById('starsContainer');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                const size = Math.random() * 2 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.animationDelay = `${Math.random() * 2}s`;
+                container.appendChild(star);
+            }
+        }
+
+        // --- API CALLS ---
+        async function fetchConfig() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/config`);
+                if (!response.ok) throw new Error('Network response was not ok');
+                const config = await response.json();
+                RAZORPAY_KEY_ID = config.razorpayKeyId;
+                if (!RAZORPAY_KEY_ID) {
+                    console.error("Razorpay Key ID not loaded from backend.");
+                    showStatus(emailStatusMessage, 'Configuration error. Please contact support.', 'error');
+                }
+            } catch (error) {
+                console.error('Failed to fetch config:', error);
+                showStatus(emailStatusMessage, 'Could not connect to the server. Please ensure the backend is running.', 'error');
+            }
+        }
+        
+        // --- EVENT HANDLERS ---
+        emailForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            userEmail = emailInput.value.trim();
+            if (!userEmail) return;
+
+            sendOtpBtn.disabled = true;
+            sendOtpBtn.innerHTML = '<span class="loading-spinner"></span>Sending...';
+            showStatus(emailStatusMessage, 'Sending verification code...', 'loading');
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/send-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: userEmail }),
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Unknown error sending OTP');
+                
+                showPage(2);
+            } catch (err) {
+                showStatus(emailStatusMessage, `Error: ${err.message}`, 'error');
+            } finally {
+                sendOtpBtn.disabled = false;
+                sendOtpBtn.innerHTML = 'Send Verification Code';
+            }
+        });
+
+        otpForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const otp = Array.from(document.querySelectorAll('.otp-input')).map(i => i.value).join('');
+            if (otp.length !== 6) return;
+
+            verifyOtpBtn.disabled = true;
+            verifyOtpBtn.innerHTML = '<span class="loading-spinner"></span>Verifying...';
+            
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/verify-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: userEmail, otp }),
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Unknown error verifying OTP');
+
+                showPage(3);
+            } catch (err) {
+                showStatus(otpStatusMessage, `Error: ${err.message}`, 'error');
+            } finally {
+                verifyOtpBtn.disabled = false;
+                verifyOtpBtn.innerHTML = 'Verify & Continue';
+            }
+        });
+
+        paymentBtn.addEventListener('click', async () => {
+            paymentBtn.disabled = true;
+            paymentBtn.innerHTML = '<span class="loading-spinner"></span>Creating Order...';
+            
+            try {
+                const orderRes = await fetch(`${API_BASE_URL}/api/create-order`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: userEmail }),
+                });
+                const order = await orderRes.json();
+                if (!orderRes.ok) throw new Error(order.error || 'Could not create order');
+
+                const options = {
+                    key: RAZORPAY_KEY_ID,
+                    amount: order.amount,
+                    currency: order.currency,
+                    name: 'BAZINGA!',
+                    description: 'Big Bang Theory Image Collection',
+                    order_id: order.id,
+                    handler: async function (response) {
+                        showStatus(paymentStatusMessage, 'Verifying payment...', 'loading');
+                        const verifyRes = await fetch(`${API_BASE_URL}/api/verify-payment`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ ...response, email: userEmail }),
+                        });
+                        const result = await verifyRes.json();
+                        if (result.status === 'success') {
+                            document.querySelector('.container').innerHTML = `
+                                <div class="main-content" style="text-align:center;">
+                                    <h2 class="content-title">🎉 BAZINGA! Success!</h2>
+                                    <p class="content-description">Your image collection has been sent to <strong>${userEmail}</strong>. Check your inbox (and spam folder)!</p>
+                                </div>`;
+                        } else {
+                            showStatus(paymentStatusMessage, 'Payment verification failed.', 'error');
+                        }
+                    },
+                    prefill: { email: userEmail },
+                    theme: { color: '#00ff88' },
+                };
+
+                const rzp = new window.Razorpay(options);
+                rzp.on('payment.failed', (response) => {
+                    showStatus(paymentStatusMessage, `Payment failed: ${response.error.description}`, 'error');
+                });
+                rzp.open();
+
+            } catch (err) {
+                showStatus(paymentStatusMessage, `Error: ${err.message}`, 'error');
+            } finally {
+                paymentBtn.disabled = false;
+                paymentBtn.innerHTML = 'Purchase Now!';
+            }
+        });
+
+        // --- APP INITIALIZATION ---
+        window.addEventListener('load', () => {
+            createStars();
+            setupOtpInputs();
+            fetchConfig(); // Fetch secret keys on load
+            showPage(1);
+        });
+    </script>
+</body>
+</html>
